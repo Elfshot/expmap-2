@@ -5,6 +5,12 @@ let playerMarker;
 let trails = [];
 let activeTO;
 
+export function clearTrails() {
+  trails.forEach((trail) => {
+    window.map.removeLayer(trail);
+  });
+}
+
 export function disableAPI() {
   try {
     document.getElementById('playerInputSearch').remove();
@@ -56,5 +62,3 @@ export default async function PlayerPos(pos) {
 
   } catch(err) { console.log(err); }
 }
-//372890
-//58376

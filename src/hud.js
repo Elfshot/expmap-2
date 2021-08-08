@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import playerTracker from './player';
+import { default as playerTracker, clearTrails } from './player';
 import { default as blipsInit } from './blips'; 
 let currentLayer = null;
 const mapLayerTypes = [['Color Map', 'images/maps/color-mode-tiles/{z}_{x}_{y}.jpg'], 
@@ -76,10 +76,9 @@ export default function init() {
 
   function options() {
     const optionsBlock = createSidebarBlock(hud, 'Map Options');
-    const headings = ['Select Map: ', 'Help~!'];
     const row1 = document.createElement('div');
     row1.className = 'row';
-    row1.innerText = headings[0];
+    row1.innerText = 'Select Map: ';
     mapLayerTypes.forEach((type) => { 
       const btn = document.createElement('input');
       btn.type = 'button';
@@ -87,8 +86,13 @@ export default function init() {
       btn.onclick = () => { changeTileLayer(type[1]); };
       row1.appendChild(btn);
     });
+
+    const row2 = document.createElement('div'); row2.className = 'row'; row2.innerText = 'Clear lines: ';
+    const r2btn = document.createElement('input'); r2btn.type = 'button'; r2btn.value = 'Clear';
+    r2btn.onclick = () => clearTrails(); row2.appendChild(r2btn);
+
     optionsBlock.appendChild(row1);
-    //hud.appendChild(optionsBlock);
+    optionsBlock.appendChild(row2);
   }
 
   function tracker() {
