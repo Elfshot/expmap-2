@@ -1,18 +1,24 @@
 import './hud.js';
-import { getIcon, getRandomColor } from './utils.js';
+import { getIcon, getRandomColor } from './utils';
+import { regionsList as regionsInit } from './hud';
 import * as L from 'leaflet';
 
 const markers = [];
+const regionColour = {};
+let blipsData;
 
 export default async function init() {
+  if (markers) await clearBlips();
   const regions = [];
-  const blipsData = await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
+  blipsData = blipsData || await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
 
   Object.keys(blipsData).forEach(region => {
-    if (window.filter && !region.toLowerCase().includes(window.filter)) return;
+    if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
+    if (window.filter && window.filter[0] && !window.filter.toString().toLowerCase().includes(region.toLowerCase())) return;
     const currRegion = blipsData[region];
-    //console.log(currRegion);
-    const colour = getRandomColor();
+    const colour = regionColour[region] || 
+      function() { const colour = getRandomColor(); regionColour[region] = colour; return colour; }();
+    
     regions.push(region);
     currRegion.forEach((blip, index) => {
       const marker = [L.marker([blip[0][0], blip[0][1]], {
@@ -29,20 +35,13 @@ export default async function init() {
       markers.push(marker);
     });
   });
-  window.regions = regions;
+  window.regions = window.regions || regions;
+
+  regionsInit();
 }
 
 export function clearBlips() {
   markers.forEach((marker) => {
     window.map.removeLayer(marker[0]);
   });
-}
-
-export function filterBlips(filter = '') {
-  filter = filter.toLowerCase();
-  markers.forEach((marker) => {
-    if (!marker[1].toLowerCase().includes(filter)) window.map.removeLayer(marker[0]);
-  });
-  window.filter = filter;
-  init();
 }

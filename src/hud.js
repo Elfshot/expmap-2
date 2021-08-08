@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
 import playerTracker from './player';
+import { default as blipsInit } from './blips'; 
 let currentLayer = null;
 const mapLayerTypes = [['Color Map', 'images/maps/color-mode-tiles/{z}_{x}_{y}.jpg'], 
   ['Dark Map', 'images/maps/dark-mode-tiles/{z}_{x}_{y}.jpg']
@@ -31,10 +32,48 @@ function changeTileLayer(newLayer) {
   currentLayer = layer;
 }
 
-const hud = document.getElementById('sideBar');
-hud.id = 'sidebar';
+const hud = document.getElementById('sidebar');
+const regionsBlock = createSidebarBlock(hud, 'Regions');
+const regionsDiv = regionsBlock.appendChild(document.createElement('div'));
+let filter;
+export function regionsList() {
+  if (!filter || (window.filterText && window.filterText !== filter)) {
+    while (regionsDiv.children.length > 0) regionsDiv.children[regionsDiv.children.length-1].remove();
+    window.filterText = window.filterText || '';
+    window.regions.forEach((region) => {
+      if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
+      const row = document.createElement('div'); row.className = 'row';
+      const btn = document.createElement('input'); btn.type = 'checkbox'; btn.value = region; 
+      btn.onclick = () => { 
+        btn.checked? window.filter.push(btn.value): window.filter.splice(window.filter.indexOf(btn.value),1);
+        blipsInit();
+      };
+      const p = document.createElement('p'); p.innerText = region; 
+      p.onclick = () => btn.click();
+      row.appendChild(btn);
+      row.appendChild(p);
+      regionsDiv.appendChild(row);
+    });
+
+    filter = window.filterText || ' ';
+  }
+}
+
 export default function init() {
   
+  function regionsSearch() {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const search = document.createElement('input');
+    search.placeholder = 'Search a Region'; search.type = 'text'; search.onkeyup = () => {
+      /*if (search.value.length < window.filterText.length)*/ window.filter = [];
+      window.filterText = search.value;
+      blipsInit();
+    };
+    row.appendChild(search);
+    regionsBlock.prepend(row);
+  }
+
   function options() {
     const optionsBlock = createSidebarBlock(hud, 'Map Options');
     const headings = ['Select Map: ', 'Help~!'];
@@ -50,10 +89,6 @@ export default function init() {
     });
     optionsBlock.appendChild(row1);
     //hud.appendChild(optionsBlock);
-  }
-
-  function regions() {
-  
   }
 
   function tracker() {
@@ -107,6 +142,7 @@ export default function init() {
   }
   options();
   tracker();
+  regionsSearch();
 }
 
 function createSidebarBlock(domSidebar, text, enabled = false){
@@ -134,6 +170,8 @@ function createSidebarBlock(domSidebar, text, enabled = false){
   block.appendChild(blockHeader);
   block.appendChild(contentBlock);
   domSidebar.appendChild(block);
+
+  contentBlock.id = text + 'ctxbx';
   return contentBlock;
 }
 
