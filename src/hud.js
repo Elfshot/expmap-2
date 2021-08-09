@@ -37,6 +37,7 @@ const regionsBlock = createSidebarBlock(hud, 'Regions');
 const regionsDiv = regionsBlock.appendChild(document.createElement('div'));
 let filter;
 export function regionsList() {
+  window.filter = window.filter || [];
   if (!filter || (window.filterText && window.filterText !== filter)) {
     while (regionsDiv.children.length > 0) regionsDiv.children[regionsDiv.children.length-1].remove();
     window.filterText = window.filterText || '';
