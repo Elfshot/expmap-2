@@ -35,29 +35,25 @@ function changeTileLayer(newLayer) {
 const hud = document.getElementById('sidebar');
 const regionsBlock = createSidebarBlock(hud, 'Regions');
 const regionsDiv = regionsBlock.appendChild(document.createElement('div'));
-let filter;
 export function regionsList() {
   window.filter = window.filter || [];
-  if (!filter || (window.filterText && window.filterText !== filter)) {
-    while (regionsDiv.children.length > 0) regionsDiv.children[regionsDiv.children.length-1].remove();
-    window.filterText = window.filterText || '';
-    window.regions.forEach((region) => {
-      if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
-      const row = document.createElement('div'); row.className = 'row';
-      const btn = document.createElement('input'); btn.type = 'checkbox'; btn.value = region; 
-      btn.onclick = () => { 
-        btn.checked? window.filter.push(btn.value): window.filter.splice(window.filter.indexOf(btn.value),1);
-        blipsInit();
-      };
-      const p = document.createElement('p'); p.innerText = region; 
-      p.onclick = () => btn.click();
-      row.appendChild(btn);
-      row.appendChild(p);
-      regionsDiv.appendChild(row);
-    });
+  while (regionsDiv.children.length > 0) regionsDiv.children[regionsDiv.children.length-1].remove();
+  window.filterText = window.filterText || '';
+  window.regions.forEach((region) => {
+    if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
+    const row = document.createElement('div'); row.className = 'row';
+    const btn = document.createElement('input'); btn.type = 'checkbox'; btn.value = region; 
+    btn.onclick = () => { 
+      btn.checked? window.filter.push(btn.value): window.filter.splice(window.filter.indexOf(btn.value),1);
+      blipsInit();
+    };
+    const p = document.createElement('p'); p.innerText = region; 
+    p.onclick = () => btn.click();
+    row.appendChild(btn);
+    row.appendChild(p);
+    regionsDiv.appendChild(row);
+  });
 
-    filter = window.filterText || ' ';
-  }
 }
 
 export default function init() {
@@ -92,8 +88,17 @@ export default function init() {
     const r2btn = document.createElement('input'); r2btn.type = 'button'; r2btn.value = 'Clear';
     r2btn.onclick = () => clearTrails(); row2.appendChild(r2btn);
 
+    window.followM = window.followM || true;
+    const row3 = document.createElement('div');
+    const markerTracker = document.createElement('input');
+    markerTracker.type = 'checkbox'; markerTracker.checked = true;
+    markerTracker.onclick = () => { markerTracker.checked = markerTracker.checked; window.followM = markerTracker.checked; };
+    row3.innerText = 'Track Markers';
+    row3.prepend(markerTracker);
+
     optionsBlock.appendChild(row1);
     optionsBlock.appendChild(row2);
+    optionsBlock.appendChild(row3);
   }
 
   function tracker() {
@@ -103,7 +108,6 @@ export default function init() {
     row1.className = 'row';
     row1.innerText = headings[0];
     const dropdown = document.createElement('select');
-    //dropdown.type = 'text';
     dropdown.name = 'ServerSelector'; dropdown.id = 'ServerSelector';
     window.serversList.forEach((server) => {
       const option = document.createElement('option');

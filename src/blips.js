@@ -12,7 +12,7 @@ export default async function init() {
   const regions = [];
   blipsData = blipsData || await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
 
-  Object.keys(blipsData).forEach(region => {
+  Object.keys(blipsData).forEach((region, indexKeys) => {
     if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
     if (window.filter && window.filter[0] && !window.filter.toString().toLowerCase().includes(region.toLowerCase())) return;
     const currRegion = blipsData[region];
@@ -33,7 +33,14 @@ export default async function init() {
       `,{ maxHeight: 1000, maxWidth: 1000 }), region];
       marker[0].addTo(window.map);
       markers.push(marker);
+      if(index === currRegion.length -1 && window.followM) window.map.flyToBounds(
+        [marker[0].getLatLng(),marker[0].getLatLng()],{
+          maxZoom: 5,
+          duration: 0.5,
+          paddingTopLeft: [-300, -50]
+        });
     });
+    //todo: find monke marker, if no filter, home in on him
   });
   window.regions = window.regions || regions;
 
