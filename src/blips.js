@@ -5,7 +5,10 @@ import * as L from 'leaflet';
 
 const markers = [];
 const regionColour = {};
+const specialMarkers = [];
 let blipsData;
+const customMarks = [[ -505.55902099609375, -197.5861053466797, 'https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/monke.png'],
+];
 
 export default async function init() {
   if (markers) await clearBlips();
@@ -22,7 +25,7 @@ export default async function init() {
     regions.push(region);
     currRegion.forEach((blip, index) => {
       const marker = [L.marker([blip[0][0], blip[0][1]], {
-        icon: getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/boost.png', 25, colour, 27),
+        icon: getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/boost.png', [25,25], colour, 27),
       }).bindPopup(`
         <div>
           <h4><b>${region} #${index+1}</b></h4>
@@ -40,15 +43,31 @@ export default async function init() {
           paddingTopLeft: [-300, -50]
         });
     });
-    //todo: find monke marker, if no filter, home in on him
   });
-  window.regions = window.regions || regions;
-
+  window.regions = regions;
+  customMarks.forEach((coords) => {
+    const marker = L.marker([coords[0], coords[1]], {
+      icon: getIcon(coords[2], [25,25]),
+    });
+    marker.addTo(window.map);
+    specialMarkers.push(marker);
+  });
+  if ((window.regions.length === 0 || !window.filterText) && !window.follow) {
+    window.map.flyToBounds(
+      [specialMarkers[0].getLatLng(),specialMarkers[0].getLatLng()],{
+        maxZoom: 5,
+        duration: 0.5,
+        paddingTopLeft: [-300, -50]
+      });
+  } 
   regionsInit();
 }
 
 export function clearBlips() {
   markers.forEach((marker) => {
     window.map.removeLayer(marker[0]);
+  });
+  specialMarkers.forEach((marker) => {
+    window.map.removeLayer(marker);
   });
 }

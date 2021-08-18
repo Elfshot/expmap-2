@@ -4,6 +4,7 @@ import './contzoom';
 import blips from './blips';
 import hud from './hud';
 import { disableAPI } from './player';
+import player from './player';
 import * as L from 'leaflet';
 
 
@@ -54,4 +55,9 @@ window.map = map;
 blips();
 hud();
 
-if(window.ketamine) disableAPI();
+setTimeout(() => {
+  if(window.ketamine) {
+    disableAPI();
+    player(true);
+  }
+}, 5000);

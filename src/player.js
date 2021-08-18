@@ -4,7 +4,7 @@ import { getIcon } from './utils';
 let playerMarker; 
 let trails = [];
 let activeTO;
-
+let beforePos;
 export function clearTrails() {
   trails.forEach((trail) => {
     window.map.removeLayer(trail);
@@ -20,16 +20,16 @@ export function disableAPI() {
 }
 
 export default async function PlayerPos(pos) {
-  const reqServer = document.getElementById('ServerSelector').value;
-  const playerId = document.getElementById('playerInputSearch').value;
+  if (pos) pos = window.ketamine;
   try {
-    if (!reqServer || !playerId) return alert('Provide the server and id dawhg');
-    const mapData = await (await fetch(`https://vps-056c096a.vps.ovh.ca:5000/api/positions?server=${
-      window.serversList.find((server) => server.name === reqServer).ip
-    }${playerId ? `&vrpid=${playerId}` : ''}`)).json();
-    //console.log(mapData);
     const playerData = [];
     if (!pos) {
+      const reqServer = document.getElementById('ServerSelector').value;
+      const playerId = document.getElementById('playerInputSearch').value;
+      if (!reqServer || !playerId) return alert('Provide the server and id dawhg');
+      const mapData = await (await fetch(`https://vps-056c096a.vps.ovh.ca:5000/api/positions?server=${
+        window.serversList.find((server) => server.name === reqServer).ip
+      }${playerId ? `&vrpid=${playerId}` : ''}`)).json();
       const player = mapData.find((players) => players[2].toString() === playerId);
       if (!player) return alert('Player not found!');
       console.log(player);
@@ -37,9 +37,12 @@ export default async function PlayerPos(pos) {
       playerData.push(player[3]['y']);
       playerData.push(player[6]);
     }
+    if (pos) playerData.push(pos[0], pos[1]);
     if (playerMarker) window.map.removeLayer(playerMarker);
+    const icon = getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/player.png', [30, 60]);
+    icon.options.iconAnchor = [15,28];
     const marker = L.marker([playerData[0], playerData[1]], {
-      icon: getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/monke.png', 30),
+      icon,
     });
     marker.addTo(window.map, { paddingTopLeft: [200, 350] });
     if (window.follow) window.map.flyTo(marker.getLatLng());
@@ -48,7 +51,12 @@ export default async function PlayerPos(pos) {
     if (!pos) activeTO = setTimeout(() => PlayerPos(), 6000); // Use active TO to avoid spamming the button for better times
 
     if (pos) {
-      // same thing w/o loop
+      if (beforePos) {
+        const latlang = [ [beforePos[0], beforePos[1]], [pos[0], pos[1]] ];
+        const line = L.polyline(latlang, { color: 'red' }).addTo(window.map);
+        trails.push(line);
+      }
+      beforePos = pos;
     } else {
       if (!playerData[2]) return;
       const latlang = [];
@@ -61,4 +69,6 @@ export default async function PlayerPos(pos) {
     }
 
   } catch(err) { console.log(err); }
+  if (pos) activeTO = setTimeout(() => PlayerPos(true), 150); // Use active TO to avoid spamming the button for better times
+
 }

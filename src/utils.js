@@ -16,7 +16,7 @@ export function getRandomColor() {
 export function getIcon(url, size, shawdowUrl, shadowsize) {
   const icon = L.icon({
     iconUrl: url,
-    iconSize: [size, size],
+    iconSize: size,
     iconAnchor: [20, 3],
     popupAnchor: [0, 0],
     shadowUrl: shawdowUrl,
