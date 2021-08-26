@@ -3,10 +3,8 @@ import './css/leaflet@1.7.1.css';
 import './contzoom';
 import blips from './blips';
 import hud from './hud';
-import { disableAPI } from './player';
-import player from './player';
+import player, { disableAPI } from './player';
 import * as L from 'leaflet';
-
 
 L.CRS.Kebab = L.extend({}, L.CRS.Simple, {
   projection: {

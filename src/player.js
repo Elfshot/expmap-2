@@ -3,7 +3,6 @@ import { getIcon } from './utils';
 
 let playerMarker; 
 let trails = [];
-let activeTO;
 let beforePos;
 export function clearTrails() {
   trails.forEach((trail) => {
@@ -48,7 +47,8 @@ export default async function PlayerPos(pos) {
     if (window.follow) window.map.flyTo(marker.getLatLng());
     playerMarker = marker;
 
-    if (!pos) activeTO = setTimeout(() => PlayerPos(), 6000); // Use active TO to avoid spamming the button for better times
+    if (!pos) window.activeTOPlayer = setTimeout(() => PlayerPos(), 6000); // Use active TO to avoid spamming the button for better times
+    else window.activeTOPlayer = undefined;
 
     if (pos) {
       if (beforePos) {
@@ -69,6 +69,6 @@ export default async function PlayerPos(pos) {
     }
 
   } catch(err) { console.log(err); }
-  if (pos) activeTO = setTimeout(() => PlayerPos(true), 150); // Use active TO to avoid spamming the button for better times
-
 }
+window.usable = window.usable || {};
+window.usable.players = PlayerPos;

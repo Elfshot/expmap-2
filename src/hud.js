@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import { default as playerTracker, clearTrails } from './player';
+import playerTracker, { clearTrails } from './player';
 import { default as blipsInit } from './blips'; 
 let currentLayer = null;
 const mapLayerTypes = [['Color Map', 'images/maps/color-mode-tiles/{z}_{x}_{y}.jpg'], 
@@ -198,3 +198,5 @@ function toggleContentBlock(checkbox, element){
   checkbox.checked = element.hidden;
   element.hidden = !element.hidden;
 }
+window.usable = window.usable || {};
+window.usable.createSidebarBlock = createSidebarBlock;

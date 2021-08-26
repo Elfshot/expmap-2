@@ -14,6 +14,7 @@ export default async function init() {
   if (markers) await clearBlips();
   const regions = [];
   blipsData = blipsData || await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
+  if (!window.blipsData) window.blipsData = blipsData;
 
   Object.keys(blipsData).forEach((region, indexKeys) => {
     if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
@@ -24,16 +25,21 @@ export default async function init() {
     
     regions.push(region);
     currRegion.forEach((blip, index) => {
+      const popup = document.createElement('div');
+      const innerDiv = document.createElement('div');
+      innerDiv.innerHTML = `
+        <h4><b>${region}-${index+1}</b></h4>
+        <h5><b>Additional Info</b>: ${blip[1]}</h5>
+        <img src="${blip[2]}" width="${window.innerWidth/3.5}" onclick="window.open('${blip[2]}').focus()">
+        <p><b>Credit: ${blip[3]}</b></p>
+        ${window.usable.popupButton? 
+    `<input type="button" value="Set Waypoint" onclick="window.usable.popupButton(${
+      blip[0][0]},${blip[0][1]})">`: ''}
+        `;
+      popup.appendChild(innerDiv);
       const marker = [L.marker([blip[0][0], blip[0][1]], {
         icon: getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/boost.png', [25,25], colour, 27),
-      }).bindPopup(`
-        <div>
-          <h4><b>${region} #${index+1}</b></h4>
-          <h5><b>Additional Info</b>: ${blip[1]}</h5>
-          <img src="${blip[2]}" width="${window.innerWidth/3.5}" onclick="window.open('${blip[2]}').focus()">
-          <p><b>Credit: ${blip[3]}</b></p>
-        </div>
-      `,{ maxHeight: 1000, maxWidth: 1000 }), region];
+      }).bindPopup(popup, { maxHeight: 1000, maxWidth: 1000 }), region];
       marker[0].addTo(window.map);
       markers.push(marker);
       if(index === currRegion.length -1 && window.followM) window.map.flyToBounds(
@@ -71,3 +77,7 @@ export function clearBlips() {
     window.map.removeLayer(marker);
   });
 }
+
+window.usable = window.usable || {};
+window.usable.popupButton = undefined;
+window.usable.blips = init;

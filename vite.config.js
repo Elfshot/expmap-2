@@ -4,6 +4,7 @@ export default {
   root: './src',
   build: {
     outDir: '../',
+    //minify: true,
   },
   server: {
     https: true,
