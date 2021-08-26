@@ -37,10 +37,21 @@ const regionsBlock = createSidebarBlock(hud, 'Regions');
 const regionsDiv = regionsBlock.appendChild(document.createElement('div'));
 export function regionsList() {
   window.filter = window.filter || [];
-  while (regionsDiv.children.length > 0) regionsDiv.children[regionsDiv.children.length-1].remove();
+  if (regionsDiv?.children?.length > 0) {
+    for (let i = 0; regionsDiv.children.length+1 !== window.filter.length;) {
+      try {
+        if ((window.filterText && !regionsDiv.children[i].innerText.includes(window.filterText)) ||
+          (window.filter && !window.filter.find(ele => ele.replace(/ /g,'') === regionsDiv.children[i].innerText.replace(/ /g,'')))) {
+          regionsDiv.children[i].remove();
+        } else i++;
+      } catch { break; }
+    }
+  }
+
   window.filterText = window.filterText || '';
   window.regions.forEach((region) => {
     if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
+    if (window.filter[0] && window.filter.includes(regionsDiv.innerText)) return;
     const row = document.createElement('div'); row.className = 'row';
     const btn = document.createElement('input'); btn.type = 'checkbox'; btn.value = region; 
     btn.onclick = () => { 
