@@ -3,7 +3,7 @@ import './css/leaflet@1.7.1.css';
 import './contzoom';
 import blips from './blips';
 import hud from './hud';
-import player, { disableAPI } from './player';
+import { disableAPI } from './player';
 import * as L from 'leaflet';
 
 L.CRS.Kebab = L.extend({}, L.CRS.Simple, {
@@ -56,6 +56,5 @@ hud();
 setTimeout(() => {
   if(window.ketamine) {
     disableAPI();
-    player(true);
   }
 }, 5000);

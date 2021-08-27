@@ -10,6 +10,8 @@ let blipsData;
 const customMarks = [[ -505.55902099609375, -197.5861053466797, 'https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/monke.png'],
 ];
 
+window.filter = window.filter || [];
+
 export default async function init() {
   if (markers) await clearBlips();
   const regions = [];
@@ -18,7 +20,7 @@ export default async function init() {
 
   Object.keys(blipsData).forEach((region, indexKeys) => {
     if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
-    if (window.filter && window.filter[0] && !window.filter.toString().toLowerCase().includes(region.toLowerCase())) return;
+    if (window.filter[0] && !window.filter.toString().toLowerCase().includes(region.toLowerCase())) return;
     const currRegion = blipsData[region];
     const colour = regionColour[region] || 
       function() { const colour = getRandomColor(); regionColour[region] = colour; return colour; }();
@@ -42,13 +44,15 @@ export default async function init() {
       }).bindPopup(popup, { maxHeight: 1000, maxWidth: 1000 }), region];
       marker[0].addTo(window.map);
       markers.push(marker);
-      if(index === currRegion.length -1 && window.followM) window.map.flyToBounds(
-        [marker[0].getLatLng(),marker[0].getLatLng()],{
-          maxZoom: 5,
-          duration: 0.5,
-          paddingTopLeft: [-300, -50]
-        });
-    });
+      if((index === currRegion.length -1 && window.followM) && (window.filter[0] || window.filterText)) {
+        console.log(marker[0]);
+        window.map.flyToBounds(
+          [marker[0].getLatLng(),marker[0].getLatLng()],{
+            maxZoom: 5,
+            duration: 0.5,
+            paddingTopLeft: [-300, -50]
+          });}
+    }); // todo
   });
   window.regions = regions;
   customMarks.forEach((coords) => {
@@ -58,7 +62,7 @@ export default async function init() {
     marker.addTo(window.map);
     specialMarkers.push(marker);
   });
-  if ((window.regions.length === 0 || !window.filterText) && !window.follow) {
+  if ((window.regions.length === 0 || !window.filterText || !window.filter[0]) && !window.follow) {
     window.map.flyToBounds(
       [specialMarkers[0].getLatLng(),specialMarkers[0].getLatLng()],{
         maxZoom: 5,

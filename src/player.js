@@ -19,7 +19,6 @@ export function disableAPI() {
 }
 
 export default async function PlayerPos(pos) {
-  if (pos) pos = window.ketamine;
   try {
     const playerData = [];
     if (!pos) {
