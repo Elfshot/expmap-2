@@ -30,7 +30,6 @@ export default async function PlayerPos(pos) {
       }${playerId ? `&vrpid=${playerId}` : ''}`)).json();
       const player = mapData.find((players) => players[2].toString() === playerId);
       if (!player) return alert('Player not found!');
-      console.log(player);
       playerData.push(player[3]['x']);
       playerData.push(player[3]['y']);
       playerData.push(player[6]);

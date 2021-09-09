@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 const markers = [];
 const regionColour = {};
 const specialMarkers = [];
-let blipsData;
+let blipsData = localStorage.getItem('blipsData') !== 'undefined' ? JSON.parse(localStorage.getItem('blipsData')): undefined;
 const customMarks = [[ -505.55902099609375, -197.5861053466797, 'https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/monke.png'],
 ];
 
@@ -15,10 +15,20 @@ window.filter = window.filter || [];
 export default async function init() {
   if (markers) await clearBlips();
   const regions = [];
-  blipsData = blipsData || await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
+  if (!blipsData) {
+    blipsData = await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
+    localStorage.setItem('blipsData',JSON.stringify(blipsData));
+  }
   if (!window.blipsData) window.blipsData = blipsData;
-
-  Object.keys(blipsData).forEach((region, indexKeys) => {
+  const blipsDataKeys = Object.keys(blipsData);
+  
+  let lastIndex;
+  for (let i = blipsDataKeys.length -1; i >= 0; i--) {
+    if (blipsDataKeys[i].toLowerCase().includes(window?.filter[0]?.toLowerCase() || window?.filterText?.toLowerCase())) {
+      lastIndex = i;
+    }
+  }
+  blipsDataKeys.forEach((region, indexKeys) => {
     if (window.filterText && !region.toLowerCase().includes(window.filterText.toLowerCase())) return;
     if (window.filter[0] && !window.filter.toString().toLowerCase().includes(region.toLowerCase())) return;
     const currRegion = blipsData[region];
@@ -44,15 +54,14 @@ export default async function init() {
       }).bindPopup(popup, { maxHeight: 1000, maxWidth: 1000 }), region];
       marker[0].addTo(window.map);
       markers.push(marker);
-      if((index === currRegion.length -1 && window.followM) && (window.filter[0] || window.filterText)) {
-        console.log(marker[0]);
+      if((index === currRegion.length -1 && ( lastIndex !== -1 && lastIndex === indexKeys) && window.followM) && (window.filter[0] || window.filterText)) {
         window.map.flyToBounds(
           [marker[0].getLatLng(),marker[0].getLatLng()],{
             maxZoom: 5,
             duration: 0.5,
             paddingTopLeft: [-300, -50]
           });}
-    }); // todo
+    });
   });
   window.regions = regions;
   customMarks.forEach((coords) => {
@@ -62,7 +71,7 @@ export default async function init() {
     marker.addTo(window.map);
     specialMarkers.push(marker);
   });
-  if ((window.regions.length === 0 || !window.filterText || !window.filter[0]) && !window.follow) {
+  if ((window.regions.length === 0 || (!window.filterText && !window.filter[0])) && !window.follow) {
     window.map.flyToBounds(
       [specialMarkers[0].getLatLng(),specialMarkers[0].getLatLng()],{
         maxZoom: 5,
