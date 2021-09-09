@@ -55,7 +55,7 @@ export function regionsList() {
     const row = document.createElement('div'); row.className = 'row';
     const btn = document.createElement('input'); btn.type = 'checkbox'; btn.value = region; 
     btn.onclick = () => { 
-      btn.checked? window.filter.push(btn.value): window.filter.splice(window.filter.indexOf(btn.value),1);
+      btn.checked? window.filter.push(btn.value): window.filter.splice(0,window.filter.length);
       blipsInit();
     };
     const p = document.createElement('p'); p.innerText = region; 
