@@ -7,7 +7,7 @@ const markers = [];
 const regionColour = {};
 const specialMarkers = [];
 let blipsData = localStorage.getItem('blipsData') !== 'undefined' ? JSON.parse(localStorage.getItem('blipsData')): undefined;
-const customMarks = [[ -505.55902099609375, -197.5861053466797, 'https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/monke.png'],
+const customMarks = [[ -505.55902099609375, -197.5861053466797, './images/maps/monke.png'],
 ];
 
 window.filter = window.filter || [];
@@ -16,7 +16,7 @@ export default async function init() {
   if (markers) await clearBlips();
   const regions = [];
   if (!blipsData) {
-    blipsData = await (await fetch('https://elfshot.github.io/expmapResources/Other%20stuff/Locations.json')).json();
+    blipsData = await (await fetch('./images/maps/Locations.json')).json();
     localStorage.setItem('blipsData',JSON.stringify(blipsData));
   }
   if (!window.blipsData) window.blipsData = blipsData;
@@ -50,7 +50,7 @@ export default async function init() {
         `;
       popup.appendChild(innerDiv);
       const marker = [L.marker([blip[0][0], blip[0][1]], {
-        icon: getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/boost.png', [25,25], colour, 27),
+        icon: getIcon('./images/maps/boost.png', [25,25], colour, 27),
       }).bindPopup(popup, { maxHeight: 1000, maxWidth: 1000 }), region];
       marker[0].addTo(window.map);
       markers.push(marker);

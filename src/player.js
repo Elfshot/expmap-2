@@ -36,7 +36,7 @@ export default async function PlayerPos(pos) {
     }
     if (pos) playerData.push(pos[0], pos[1]);
     if (playerMarker) window.map.removeLayer(playerMarker);
-    const icon = getIcon('https://elfshot.github.io/expmapResources/Other%20stuff/Images/maps/player.png', [30, 60]);
+    const icon = getIcon('./images/maps/player.png', [30, 60]);
     icon.options.iconAnchor = [15,28];
     const marker = L.marker([playerData[0], playerData[1]], {
       icon,
