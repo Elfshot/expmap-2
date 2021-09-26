@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 const markers = [];
 const regionColour = {};
 const specialMarkers = [];
-let blipsData = localStorage.getItem('blipsData') !== 'undefined' ? JSON.parse(localStorage.getItem('blipsData')): undefined;
+let blipsData = localStorage.getItem('blipsData26/09/21') !== 'undefined' ? JSON.parse(localStorage.getItem('blipsData26/09/21')): undefined;
 const customMarks = [[ -505.55902099609375, -197.5861053466797, './images/maps/monke.png'],
 ];
 
@@ -17,7 +17,7 @@ export default async function init() {
   const regions = [];
   if (!blipsData) {
     blipsData = await (await fetch('./images/maps/Locations.json')).json();
-    localStorage.setItem('blipsData',JSON.stringify(blipsData));
+    localStorage.setItem('blipsData26/09/21',JSON.stringify(blipsData));
   }
   if (!window.blipsData) window.blipsData = blipsData;
   const blipsDataKeys = Object.keys(blipsData);
