@@ -5,18 +5,13 @@ let currentLayer = null;
 const mapLayerTypes = [['Color Map', 'images/maps/color-mode-tiles/{z}_{x}_{y}.jpg'], 
   ['Dark Map', 'images/maps/dark-mode-tiles/{z}_{x}_{y}.jpg']
 ];
+
 window.serversList = [
-  { ip: 'https://tycoon-w8r4q4.users.cfx.re', name: 'Server #1 (OneSync)' },
-  { ip: 'https://tycoon-2epova.users.cfx.re', name: 'Server #2' },
-  { ip: 'https://tycoon-2epovd.users.cfx.re', name: 'Server #3' },
-  { ip: 'https://tycoon-wdrypd.users.cfx.re', name: 'Server #4' },
-  { ip: 'https://tycoon-njyvop.users.cfx.re', name: 'Server #5 (Beta)' },
-  { ip: 'https://tycoon-2r4588.users.cfx.re', name: 'Server #6' },
-  { ip: 'https://tycoon-npl5oy.users.cfx.re', name: 'Server #7' },
-  { ip: 'https://tycoon-2vzlde.users.cfx.re', name: 'Server #8' },
-  { ip: 'https://tycoon-wmapod.users.cfx.re', name: 'Server #9' },
-  { ip: 'https://tycoon-wxjpge.users.cfx.re', name: 'Server #A' },
-  { ip: 'https://tycoon-2rkmr8.users.cfx.re', name: 'Server #B' },
+  { ip: ['https://tycoon-w8r4q4.users.cfx.re','http://server.tycoon.community:30169'], name: 'Server #1 (OneSync)' },
+  { ip: ['https://tycoon-2epova.users.cfx.re','http://server.tycoon.community:30122'], name: 'Server #2' },
+  { ip: ['https://tycoon-2epovd.users.cfx.re','http://server.tycoon.community:30123'], name: 'Server #3' },
+  { ip: ['https://tycoon-wdrypd.users.cfx.re','http://server.tycoon.community:30124'], name: 'Server #4' },
+  { ip: ['https://tycoon-njyvop.users.cfx.re','http://server.tycoon.community:30125'], name: 'Server #5 (Beta)' },
 ];
 
 function changeTileLayer(newLayer) {

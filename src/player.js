@@ -26,7 +26,7 @@ export default async function PlayerPos(pos) {
       const playerId = document.getElementById('playerInputSearch').value;
       if (!reqServer || !playerId) return alert('Provide the server and id dawhg');
       const mapData = await (await fetch(`https://vps-056c096a.vps.ovh.ca:5000/api/positions?server=${
-        window.serversList.find((server) => server.name === reqServer).ip
+        window.serversList.find((server) => server.name === reqServer).ip[1]
       }${playerId ? `&vrpid=${playerId}` : ''}`)).json();
       const player = mapData.find((players) => players[2].toString() === playerId);
       if (!player) return alert('Player not found!');
