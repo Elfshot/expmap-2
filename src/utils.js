@@ -1,5 +1,5 @@
 const colors = [
-  'blue', 'brown', 'green', 'grey', 'orange', 'purple', 'red', 'yellow'
+  'bgreen', 'blue', 'brown', 'green', 'grey', 'lblue', 'orange', 'pink', 'purple', 'pyellow', 'red', 'teal', 'yellow'
 ];
 export function getRandomColor() {
   return `images/emotes/${colors[Math.floor(Math.random() * colors.length)]}.svg`;

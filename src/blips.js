@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 const markers = [];
 const regionColour = {};
 const specialMarkers = [];
-let blipsData = localStorage.getItem('blipsData26/09/21') !== 'undefined' ? JSON.parse(localStorage.getItem('blipsData26/09/21')): undefined;
+let blipsData = localStorage.getItem('blipsData5/10/21') !== 'undefined' ? JSON.parse(localStorage.getItem('blipsData5/10/21')): undefined;
 const customMarks = [[ -505.55902099609375, -197.5861053466797, './images/maps/monke.png'],
 ];
 
@@ -42,7 +42,8 @@ export default async function init() {
       innerDiv.innerHTML = `
         <h4><b>${region}-${index+1}</b></h4>
         <h5><b>Additional Info</b>: ${blip[1]}</h5>
-        <img src="${blip[2]}" width="${window.innerWidth/3.5}" onclick="window.open('${blip[2]}').focus()">
+        <img src="${blip[2][0]}" width="${window.innerWidth/3.5}" onclick="window.open('${blip[2][1]}').focus()">
+        <p>(Click for better quality!)</p>
         <p><b>Credit: ${blip[3]}</b></p>
         ${window.usable.popupButton? 
     `<input type="button" value="Set Waypoint" onclick="window.usable.popupButton(${
