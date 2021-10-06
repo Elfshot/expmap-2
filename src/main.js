@@ -6,6 +6,9 @@ import hud from './hud';
 import { disableAPI } from './player';
 import * as L from 'leaflet';
 
+if (!window.location.host.includes('localhost') && 
+  window.location.host !== 'expmap.elfshot.xyz') window.location.replace('https://expmap.elfshot.xyz');
+
 L.CRS.Kebab = L.extend({}, L.CRS.Simple, {
   projection: {
     project: latlng => new L.Point(latlng.lat, latlng.lng),
