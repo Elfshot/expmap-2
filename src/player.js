@@ -26,7 +26,7 @@ export default async function PlayerPos(pos) {
       const playerId = document.getElementById('playerInputSearch').value;
       if (!reqServer || !playerId) return alert('Provide the server and id dawhg');
       const mapData = await (await fetch(`https://elfshot.xyz/ttapi/positions?server=${
-        window.serversList.find((server) => server.name === reqServer).ip[1]
+        window.serversList.find((server) => server.name === reqServer).ip
       }${playerId ? `&vrpid=${playerId}` : ''}`)).json();
       const player = mapData.find((players) => players[2].toString() === playerId);
       if (!player) return alert('Player not found!');

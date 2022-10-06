@@ -7,3 +7,4 @@ dist-ssr
 /assets
 /index.html
 /src/images
+package-lock.json

@@ -7,11 +7,8 @@ const mapLayerTypes = [['Color Map', 'images/maps/color-mode-tiles/{z}_{x}_{y}.j
 ];
 
 window.serversList = [
-  { ip: ['https://tycoon-w8r4q4.users.cfx.re','http://server.tycoon.community:30169'], name: 'Server #1 (OneSync)' },
-  { ip: ['https://tycoon-2epova.users.cfx.re','http://server.tycoon.community:30122'], name: 'Server #2' },
-  { ip: ['https://tycoon-2epovd.users.cfx.re','http://server.tycoon.community:30123'], name: 'Server #3' },
-  { ip: ['https://tycoon-wdrypd.users.cfx.re','http://server.tycoon.community:30124'], name: 'Server #4' },
-  { ip: ['https://tycoon-njyvop.users.cfx.re','http://server.tycoon.community:30125'], name: 'Server #5 (Beta)' },
+  { ip: 'https://tycoon-2epova.users.cfx.re', name: 'Server #1' },
+  { ip: 'https://tycoon-njyvop.users.cfx.re', name: 'Server #2 (Beta)' },
 ];
 
 function changeTileLayer(newLayer) {
