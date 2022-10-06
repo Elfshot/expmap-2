@@ -18,6 +18,9 @@ export function disableAPI() {
   } catch { }
 }
 
+const icon = getIcon('./images/maps/player.png', [30, 60]);
+icon.options.iconAnchor = [15,28];
+
 export default async function PlayerPos(pos) {
   try {
     const playerData = [];
@@ -35,15 +38,16 @@ export default async function PlayerPos(pos) {
       playerData.push(player[6]);
     }
     if (pos) playerData.push(pos[0], pos[1]);
-    if (playerMarker) window.map.removeLayer(playerMarker);
-    const icon = getIcon('./images/maps/player.png', [30, 60]);
-    icon.options.iconAnchor = [15,28];
-    const marker = L.marker([playerData[0], playerData[1]], {
-      icon,
-    });
-    marker.addTo(window.map, { paddingTopLeft: [200, 350] });
-    if (window.follow) window.map.flyTo(marker.getLatLng());
-    playerMarker = marker;
+    if (!playerMarker) {
+      playerMarker = L.marker([playerData[0], playerData[1]], {
+        icon,
+      });
+
+      playerMarker.addTo(window.map, { paddingTopLeft: [200, 350] });
+    }
+
+    playerMarker.setLatLng([playerData[0], playerData[1]]);
+    if (window.follow) window.map.flyTo(playerMarker.getLatLng());
 
     if (!pos) window.activeTOPlayer = setTimeout(() => PlayerPos(), 6000); // Use active TO to avoid spamming the button for better times
     else window.activeTOPlayer = undefined;
