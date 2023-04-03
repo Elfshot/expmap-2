@@ -7,8 +7,8 @@ const mapLayerTypes = [['Color Map', 'images/maps/color-mode-tiles/{z}_{x}_{y}.j
 ];
 
 window.serversList = [
-  { ip: 'https://tycoon-2epova.users.cfx.re', name: 'Server #1' },
-  { ip: 'https://tycoon-njyvop.users.cfx.re', name: 'Server #2 (Beta)' },
+  { ip: 'http://v1.api.tycoon.community/main', name: 'Server #1' },
+  { ip: 'http://v1.api.tycoon.community/beta', name: 'Server #2 (Beta)' },
 ];
 
 function changeTileLayer(newLayer) {
